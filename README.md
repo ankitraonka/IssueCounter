@@ -1,4 +1,4 @@
-IssueCounter
+IssueCounter (Implemented in Python using Django)
 
 application live at: http://git-issue-counter.herokuapp.com/
 
