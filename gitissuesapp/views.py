@@ -147,7 +147,7 @@ def main(request):
 		total_open_before_7 = total_issues_before_7 - total_pulls_before_7
 
 		issues={}
-		issues['message']="Succesful"
+		issues['message']="Successful"
 		issues["user"]=user
 		issues["repo"]=repo
 		issues["total"]=total_open

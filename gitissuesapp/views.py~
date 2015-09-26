@@ -40,6 +40,8 @@ def getTotalIssues():
     global total_issues_1
     global total_issues_7
     global total_issues_before_7
+    global total_pulls_1
+    global total_pulls_7
 
     count=100  #initialised with 100 so that it runs atleast once
     page=0
@@ -55,8 +57,12 @@ def getTotalIssues():
                 time=issue["created_at"]
                 if time>date_before_1:
                     total_issues_1+=1
+		    if issue.has_key('pull_request'):
+			total_pulls_1+=1
                 elif time>date_before_7:
                     total_issues_7+=1
+		    if issue.has_key('pull_request'):
+			total_pulls_7+=1
                 else:
 		#once true it means we have checked every pull created in last 7 days and hence we dont need to
 		#check each pull now and juz need to count pulls in each rendered page
@@ -76,8 +82,6 @@ def getTotalIssues():
 ###############################################################################################################################
 def getPullCount():
     global total_pulls
-    global total_pulls_1
-    global total_pulls_7
     global total_pulls_before_7
     
     page=0
@@ -90,27 +94,15 @@ def getPullCount():
         content=json.loads(response.content or response.text)
         count=len(content)
         total_pulls+=count
-        while complete==False:
-            for pull in content:
-                time=pull["created_at"]
-                if time>date_before_1:
-                    total_pulls_1+=1
-                elif time>date_before_7:
-                    total_pulls_7+=1
-                else:
-		#once true it means we have checked every pull created in last 7 days and hence we dont need to
-		#check each pull now and juz need to count pulls in each rendered page
-                    complete=True  
-                    break
-    print total_pulls_1
+        
     total_pulls_before_7 = total_pulls - total_pulls_7 - total_pulls_1
     
     return
         
 def main(request):
-	print "got_in"
+	#print "got_in"
 	if request.POST:
-		print "in_post"	    
+	#	print "in_post"	    
 		input_url=str(request.POST.get('url'))
 		arr=map(str,input_url.split("/"))
 		if arr[1]=="":
@@ -162,10 +154,10 @@ def main(request):
 		issues["within1"]=total_open_1
 		issues["within7"]=total_open_7
 		issues["before7"]=total_open_before_7
-		print "Total open :",total_open
-		print "Total open in 24 hrs:",total_open_1
-		print "Total open in  1-6:",total_open_7
-		print "Total open in 7-infi:",total_open_before_7
+		#print "Total open :",total_open
+		#print "Total open in 24 hrs:",total_open_1
+		#print "Total open in  1-6:",total_open_7
+		#print "Total open in 7-infi:",total_open_before_7
 		return render(request,"index.html",issues)
 	else:
 		print "in_else"
