@@ -126,7 +126,6 @@ def main(request):
     		repo_detail=json.loads(response.content or response.text)
 
 		if repo_detail.has_key("message"):
-			print repo_detail["message"]
 			issues={}
 			issues['message']=repo_detail['message']
 			issues["user"]="-"
